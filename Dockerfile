@@ -4,6 +4,7 @@ WORKDIR /
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update -y && \
     apt install --yes --no-install-recommends \
+        wget \
         g++ \
         gcc \
         git \
@@ -20,7 +21,6 @@ RUN apt update -y && \
         libasound2-dev \
         libpulse-dev \
         make \
-        cmake \
         unzip \
         zip \
         sudo \
@@ -30,8 +30,22 @@ RUN apt update -y && \
         ninja-build && \
         rm -rf /var/lib/apt/lists/*
 
+RUN export VCPKG_FORCE_SYSTEM_BINARIES=1
+
+RUN cd /opt && \
+    wget https://github.com/Kitware/CMake/releases/download/v3.28.0-rc4/cmake-3.28.0-rc4-linux-aarch64.sh && \
+    chmod +x ./cmake-3.28.0-rc4-linux-aarch64.sh && \
+    mkdir /opt/cmake-3.28.0-rc4-linux-aarch64 && \
+    ./cmake-3.28.0-rc4-linux-aarch64.sh --skip-license --prefix=/opt/cmake-3.28.0-rc4-linux-aarch64 && \
+    sudo ln -s /opt/cmake-3.28.0-rc4-linux-aarch64/bin/* /usr/local/bin && \
+    ls && \
+    cmake --version
+
 RUN git clone --branch 2023.04.15 --depth=1 https://github.com/microsoft/vcpkg && \
-    /vcpkg/bootstrap-vcpkg.sh -disableMetrics && \
+    /vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+RUN export VCPKG_FORCE_SYSTEM_BINARIES=1 && \
+    cmake --version && \
     /vcpkg/vcpkg --disable-metrics install libvpx libyuv opus aom
 
 RUN groupadd -r user && \
