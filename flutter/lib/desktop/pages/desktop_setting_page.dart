@@ -1032,6 +1032,15 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
     super.build(context);
     bool enabled = !locked;
     final scrollController = ScrollController();
+
+    // Setting page is not modal, oldOptions should only be used when getting options, never when setting.
+    Map<String, dynamic> oldOptions =
+        jsonDecode(bind.mainGetOptionsSync() as String);
+    old(String key) {
+      return (oldOptions[key] ?? '').trim();
+    }
+
+
     return DesktopScrollWrapper(
         scrollController: scrollController,
         child: ListView(
@@ -1045,7 +1054,20 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
               AbsorbPointer(
                 absorbing: locked,
                 child: Column(children: [
-                  server(enabled),
+                  _Card(title: 'ID/Relay Server', children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        SelectionArea(
+                          child: Text('L\'app è legata ai server AlphaDevelopment ('+old('custom-rendezvous-server')+').').marginSymmetric(vertical: 4.0)),
+                        SelectionArea(
+                          child: Text('Server: '+old('custom-rendezvous-server')+'').marginSymmetric(vertical: 4.0)),
+                      ])
+                  ]),
+                  // server(enabled),
                   _Card(title: 'Proxy', children: [
                     _Button('Socks5 Proxy', changeSocks5Proxy,
                         enabled: enabled),
@@ -1069,10 +1091,10 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
       RxString relayErrMsg = ''.obs;
       RxString apiErrMsg = ''.obs;
       var idController =
-          TextEditingController(text: old('custom-rendezvous-server'));
-      var relayController = TextEditingController(text: old('relay-server'));
-      var apiController = TextEditingController(text: old('api-server'));
-      var keyController = TextEditingController(text: old('key'));
+          TextEditingController(text: "old('custom-rendezvous-server')");
+      var relayController = TextEditingController(text: "old('relay-server')");
+      var apiController = TextEditingController(text: "old('api-server')");
+      var keyController = TextEditingController(text: "old('key')");
       final controllers = [
         idController,
         relayController,
@@ -1110,13 +1132,13 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
             Column(
               children: [
                 Obx(() => _LabeledTextField(context, 'ID Server', idController,
-                    idErrMsg.value, enabled, secure)),
+                    idErrMsg.value, !enabled, secure)),
                 Obx(() => _LabeledTextField(context, 'Relay Server',
-                    relayController, relayErrMsg.value, enabled, secure)),
+                    relayController, relayErrMsg.value, !enabled, secure)),
                 Obx(() => _LabeledTextField(context, 'API Server',
-                    apiController, apiErrMsg.value, enabled, secure)),
+                    apiController, apiErrMsg.value,! enabled, secure)),
                 _LabeledTextField(
-                    context, 'Key', keyController, '', enabled, secure),
+                    context, 'Key', keyController, '', !enabled, secure),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [_Button('Apply', submit, enabled: enabled)],
@@ -1520,7 +1542,7 @@ class _AboutState extends State<_About> {
           child: SingleChildScrollView(
             controller: scrollController,
             physics: DraggableNeverScrollableScrollPhysics(),
-            child: _Card(title: '${translate('About')} RustDesk', children: [
+            child: _Card(title: '${translate('About')} AlphaDesk', children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

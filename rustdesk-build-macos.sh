@@ -1,19 +1,15 @@
 #!/bin/sh
 
-mkdir $HOME/Downloads/rustdesk-build
-
-
 brew install flutter cocoapods
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 brew install llvm create-dmg nasm yasm cmake gcc wget ninja pkg-config
 
 
 
-FLUTTER_RUST_BRIDGE_VERSION="1.75.3"
+FLUTTER_RUST_BRIDGE_VERSION="1.80.1"
 
+export VCPKG_ROOT=$PWD/vcpkg
 
-
-cd $HOME/Downloads/rustdesk-build
 git clone https://github.com/microsoft/vcpkg
 cd vcpkg
 git checkout 2023.04.15
@@ -24,9 +20,8 @@ git clone https://github.com/rustdesk/rustdesk
 cd rustdesk
 
 
-# Change this
-export VCPKG_ROOT=$HOME/Downloads/rustdesk-build/vcpkg
-
+# Rebuild UI
+python3 res/inline-sciter.py
 
 wget https://github.com/c-smile/sciter-sdk/raw/master/bin.osx/libsciter.dylib
 
@@ -41,4 +36,9 @@ pushd flutter && flutter pub get && popd
 ./build.py --flutter
 
 
-# The file is $HOME/flutter/rustdesk.dmg
+codesign --force --options runtime -s "Apple Development: Emiliano Fabris (46YA22TMQQ)" --deep --strict ./flutter/build/macos/Build/Products/Release/AlphaDesk.app -vvv
+
+
+
+
+# The file is not in $HOME/flutter/rustdesk.dmg

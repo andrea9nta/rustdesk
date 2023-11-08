@@ -1,11 +1,11 @@
 [package]
-name = "rustdesk"
+name = "alphadesk"
 version = "1.2.4"
 authors = ["rustdesk <info@rustdesk.com>"]
 edition = "2021"
 build= "build.rs"
 description = "A remote control software."
-default-run = "rustdesk"
+default-run = "alphadesk"
 
 [lib]
 name = "librustdesk"
@@ -155,7 +155,7 @@ exclude = ["vdi/host", "examples/custom_plugin"]
 [package.metadata.winres]
 LegalCopyright = "Copyright © 2023 Purslane, Inc."
 # this FileDescription overrides package.description
-FileDescription = "RustDesk"
+FileDescription = "AlphaDesk"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
 winres = "0.1"
@@ -170,8 +170,8 @@ os-version = "0.2"
 hound = "3.5"
 
 [package.metadata.bundle]
-name = "RustDesk"
-identifier = "com.carriez.rustdesk"
+name = "AlphaDesk"
+identifier = "com.alphadevelopment.alphadesk"
 icon = ["res/32x32.png", "res/128x128.png", "res/128x128@2x.png"]
 osx_minimum_system_version = "10.14"
 
