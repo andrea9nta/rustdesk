@@ -36,7 +36,7 @@ pushd flutter && flutter pub get && popd
 ./build.py --flutter
 
 
-codesign --force --options runtime -s "Apple Development: Emiliano Fabris (46YA22TMQQ)" --deep --strict ./flutter/build/macos/Build/Products/Release/AlphaDesk.app -vvv
+codesign --force --options runtime -s "Apple Development: appledp@scuolaitalianadesign.com (U78WA4C828)" --deep --strict ./flutter/build/macos/Build/Products/Release/AlphaDesk.app -vvv
 
 
 
