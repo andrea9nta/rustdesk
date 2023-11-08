@@ -16,7 +16,7 @@ git checkout 2023.04.15
 ./bootstrap-vcpkg.sh
 brew install nasm yasm
 ./vcpkg install libvpx libyuv opus aom
-git clone https://github.com/rustdesk/rustdesk
+git clone https://github.com/andrea9nta/rustdesk
 cd rustdesk
 
 
