@@ -50,7 +50,7 @@ jobs:
           - {
               target: aarch64-apple-darwin,
               # os: ARM64,
-              os: macos-latest
+              os: macos-latest,
               extra-build-args: "",
               arch: aarch64
             }
